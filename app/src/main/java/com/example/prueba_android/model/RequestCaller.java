@@ -1,23 +1,29 @@
 package com.example.prueba_android.model;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
 
 public class RequestCaller {
 
-    private Callback<Cat> callBack;
     private IRetroRequest request;
 
-    public RequestCaller(Callback<Cat> callBack){
-        this.callBack = callBack;
+    public RequestCaller(){
         request = RetrofitClient.getRetrofit().create(IRetroRequest.class);
     }
 
-    public void sendRequest(){
-        Call<Cat> call = request.onCatGot();
+    public void sendCatRequest(String id, Callback<Cat> callBack){
+        Call<Cat> call = request.onCatGot(id);
         call.enqueue(callBack);
     }
+
+    public void sendBreedsRequest(Callback<List<Breed>> breedCallBack){
+        Call<List<Breed>> call = request.onBreedsGot();
+        call.enqueue(breedCallBack);
+    }
+
+
 
 
 }

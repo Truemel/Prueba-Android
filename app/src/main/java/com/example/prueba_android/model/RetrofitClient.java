@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String PATH = "https://api.thecatapi.com/v1/images/";
+    private static final String PATH = "https://api.thecatapi.com/v1/";
 
     private static Retrofit retrofit;
 
