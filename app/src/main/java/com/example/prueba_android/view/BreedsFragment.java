@@ -71,6 +71,10 @@ public class BreedsFragment extends Fragment implements View.OnClickListener, On
 
     @Override
     public void onBreedClick(Breed breed) {
-
+        CatDetailsFragment fragment = new CatDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", breed.id);
+        fragment.setArguments(bundle);
+        ((MainActivity)getActivity()).changeFragment(fragment);
     }
 }
