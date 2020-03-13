@@ -9,8 +9,8 @@ import retrofit2.http.Path;
 
 public interface IRetroRequest {
     @Headers("x-api-key: 836b953e-953b-407c-a015-242b0fe495d2")
-    @GET("images/search?breed_id={id}")
-    public Call<Cat> onCatGot(@Path("id")String breedId);
+    @GET("images/search?limit={limit}&breed_id={id}")
+    public Call<List<Cat>> onCatGot(@Path("id")String breedId, @Path("limit")int limit);
 
     @Headers("x-api-key: 836b953e-953b-407c-a015-242b0fe495d2")
     @GET("breeds")

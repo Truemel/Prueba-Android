@@ -30,7 +30,7 @@ public class AmazingCatPresenter {
         request.sendBreedsRequest(new Callback<List<Breed>>() {
             @Override
             public void onResponse(Call<List<Breed>> call, Response<List<Breed>> response) {
-                if(response.isSuccessful())
+                if(response != null && response.isSuccessful())
                     listener.onBreedsGot(response.body());
             }
 
@@ -41,16 +41,16 @@ public class AmazingCatPresenter {
         });
     }
 
-    public void catRequest(String id){
-        request.sendCatRequest(id, new Callback<Cat>() {
+    public void catRequest(String id, int limit){
+        request.sendCatRequest(id, limit, new Callback<List<Cat>>() {
             @Override
-            public void onResponse(Call<Cat> call, Response<Cat> response) {
-                if(response.isSuccessful())
+            public void onResponse(Call<List<Cat>> call, Response<List<Cat>> response) {
+                if(response != null && response.isSuccessful())
                     listener.onCatGot(response.body());
             }
 
             @Override
-            public void onFailure(Call<Cat> call, Throwable t) {
+            public void onFailure(Call<List<Cat>> call, Throwable t) {
                 Toast.makeText(context, "Error, no se pudo recibir la imagen de Cat", Toast.LENGTH_LONG).show();
             }
         });

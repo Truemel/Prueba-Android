@@ -13,8 +13,8 @@ public class RequestCaller {
         request = RetrofitClient.getRetrofit().create(IRetroRequest.class);
     }
 
-    public void sendCatRequest(String id, Callback<Cat> callBack){
-        Call<Cat> call = request.onCatGot(id);
+    public void sendCatRequest(String id, int limit, Callback<List<Cat>> callBack){
+        Call<List<Cat>> call = request.onCatGot(id, limit);
         call.enqueue(callBack);
     }
 
@@ -22,8 +22,5 @@ public class RequestCaller {
         Call<List<Breed>> call = request.onBreedsGot();
         call.enqueue(breedCallBack);
     }
-
-
-
 
 }
