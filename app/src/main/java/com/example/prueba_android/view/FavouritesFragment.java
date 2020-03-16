@@ -39,6 +39,9 @@ public class FavouritesFragment extends Fragment implements OnFavourCatListener 
         progress = ProgressDialog.show(getContext(), "Loading", "Now Loading", true);
     }
 
+    /**
+     * Inicializa firebase y pide a presentador de firebase que adquiera la lista de gatitos favoritos
+     */
     private void init(){
         fireDB = new FireBaseDBPresenter(getContext(), this);
         fireDB.getFavouriteCatsList();

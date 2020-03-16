@@ -25,9 +25,6 @@ public class Breed {
     @SerializedName("wikipedia_url")
     public String wikiUrl;
 
-        /*@SerializedName("weight_imperial")
-        public String weightImp;*/
-
     public CatWeight weight;
 
     public class CatWeight{
@@ -69,4 +66,46 @@ public class Breed {
 
     @SerializedName("stranger_friendly")
     public int gaijinFriend;
+
+    @Override
+    public String toString() {
+        return "Breed{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", temperament='" + temperament + '\'' +
+                ", origin='" + origin + '\'' +
+                ", description='" + description + '\'' +
+                ", experimental=" + experimental +
+                ", hairless=" + hairless +
+                ", natural=" + natural +
+                ", rare=" + rare +
+                ", rex=" + rex +
+                ", hypoallergenic=" + hypoallergenic +
+                ", adaptability=" + adaptability +
+                ", grooming=" + grooming +
+                ", intelligence=" + intelligence +
+                ", vocalisation=" + vocalisation +
+                ", lap=" + lap +
+                ", indoor=" + indoor +
+                ", vCAUrl='" + vCAUrl + '\'' +
+                ", vetUrl='" + vetUrl + '\'' +
+                ", cFAUrl='" + cFAUrl + '\'' +
+                ", lifeSpan='" + lifeSpan + '\'' +
+                ", altNames='" + altNames + '\'' +
+                ", wikiUrl='" + wikiUrl + '\'' +
+                ", weight=" + weight +
+                ", countryCode='" + countryCode + '\'' +
+                ", countryCodes='" + countryCodes + '\'' +
+                ", suppresTail=" + suppresTail +
+                ", shortLegs=" + shortLegs +
+                ", affection=" + affection +
+                ", childFriend=" + childFriend +
+                ", demonTolerance=" + demonTolerance +
+                ", energy=" + energy +
+                ", health=" + health +
+                ", shedding=" + shedding +
+                ", socialNeeds=" + socialNeeds +
+                ", gaijinFriend=" + gaijinFriend +
+                '}';
+    }
 }

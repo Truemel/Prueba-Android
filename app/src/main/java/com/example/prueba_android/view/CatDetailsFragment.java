@@ -12,25 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.prueba_android.R;
-import com.example.prueba_android.model.Breed;
 import com.example.prueba_android.model.Cat;
 import com.example.prueba_android.model.CatListAdapter;
 import com.example.prueba_android.model.OnCatClickListener;
-import com.example.prueba_android.presenter.AmazingCatPresenter;
 import com.example.prueba_android.presenter.FireBaseDBPresenter;
-import com.example.prueba_android.presenter.OnCatRequestListener;
-import com.example.prueba_android.presenter.OnFavourCatListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CatDetailsFragment extends Fragment implements OnCatRequestListener, OnCatClickListener {
+public class CatDetailsFragment extends Fragment implements OnCatClickListener {
 
     private List<Cat> catList;
     private RecyclerView recyclerView;
     private FireBaseDBPresenter fireDB;
+    private String breedName;
 
     public CatDetailsFragment() {
         // Required empty public constructor
@@ -42,10 +41,14 @@ public class CatDetailsFragment extends Fragment implements OnCatRequestListener
         init();
     }
 
+    /**
+     * Inicializa firebase y agrega valores a variables
+     */
     private void init(){
         fireDB = new FireBaseDBPresenter(getContext(), null);
-        AmazingCatPresenter catPresenter = new AmazingCatPresenter(this, getContext());
-        catPresenter.catRequest(getArguments().getString("id"), 100);
+        TypeToken<List<Cat>> typeToken = new TypeToken<List<Cat>>(){};
+        catList = new Gson().fromJson(getArguments().getString("cats"), typeToken.getType());
+        breedName = getArguments().getString("cat_name");
     }
 
     @Override
@@ -54,22 +57,20 @@ public class CatDetailsFragment extends Fragment implements OnCatRequestListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cat_details, container, false);
         recyclerView = view.findViewById(R.id.recDetailsView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        initView();
         return view;
     }
 
-    @Override
-    public void onCatGot(List<Cat> cat) {
-        recyclerView.setAdapter(new CatListAdapter(getContext(), cat, this));
-    }
-
-    @Override
-    public void onBreedsGot(List<Breed> breeds) {
-
+    /**
+     * Prepara recyclerview y le agrega el adaptador
+     */
+    private void initView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new CatListAdapter(getContext(), catList, this));
     }
 
     @Override
     public void onCatClick(Cat cat) {
-        fireDB.uploadFavourite(cat);
+        fireDB.uploadFavourite(cat, breedName);
     }
 }

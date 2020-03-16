@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import com.example.prueba_android.R;
 import com.example.prueba_android.model.Breed;
@@ -27,12 +26,19 @@ public class MainActivity extends AppCompatActivity implements OnCatRequestListe
         getBreeds();
     }
 
+    /**
+     * Mostrar progress dialog mientras le pide al presentador que pida la lista de razas de gatitos
+     */
     private void getBreeds(){
         progress = ProgressDialog.show(this, "Loading", "Now Loading", true);
         AmazingCatPresenter catPresenter = new AmazingCatPresenter(this, this);
         catPresenter.breedsRequest();
     }
 
+    /**
+     * Inicia el fragmento de razas de gatitos
+     * @param breeds
+     */
     private void init(List<Breed> breeds){
         BreedsFragment fragment = new BreedsFragment();
         Bundle bundle = new Bundle();
@@ -42,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements OnCatRequestListe
         progress.dismiss();
     }
 
+    /**
+     * Reemplazador de fragmentos
+     * @param fragment
+     */
     public void changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frameLay, fragment).commit();
     }

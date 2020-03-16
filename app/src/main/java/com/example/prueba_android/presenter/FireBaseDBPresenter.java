@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Presentador para administrar firebase
+ */
 public class FireBaseDBPresenter implements OnSuccessListener<DocumentReference>, OnFailureListener, OnCompleteListener<QuerySnapshot> {
 
     private FirebaseFirestore db;
@@ -34,16 +37,26 @@ public class FireBaseDBPresenter implements OnSuccessListener<DocumentReference>
         db = FirebaseFirestore.getInstance();
     }
 
-    public void uploadFavourite(Cat cat){
+    /**
+     * Subir gatito a favoritos en firebase
+     * @param cat
+     * @param breedName
+     */
+    public void uploadFavourite(Cat cat, String breedName){
         Favorite fav = new Favorite();
         if(cat.breeds != null && cat.breeds.length > 0)
             fav.raza = cat.breeds[0].name;
+        else
+            fav.raza = breedName;
         fav.url = cat.url;
         fav.timeStamp = System.currentTimeMillis()+"";
         CollectionReference collectionReference = db.collection(FAVOURITES);
         collectionReference.add(fav).addOnSuccessListener(this).addOnFailureListener(this);
     }
 
+    /**
+     * Obtener lista de gatitos favoritos
+     */
     public void getFavouriteCatsList(){
         db.collection(FAVOURITES).get().addOnCompleteListener(this);
     }
