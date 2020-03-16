@@ -1,7 +1,6 @@
 package com.example.prueba_android.presenter;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 
 public class FireBaseDBPresenter implements OnSuccessListener<DocumentReference>, OnFailureListener, OnCompleteListener<QuerySnapshot> {
 
@@ -35,7 +36,8 @@ public class FireBaseDBPresenter implements OnSuccessListener<DocumentReference>
 
     public void uploadFavourite(Cat cat){
         Favorite fav = new Favorite();
-        fav.raza = cat.breeds[0].name;
+        if(cat.breeds != null && cat.breeds.length > 0)
+            fav.raza = cat.breeds[0].name;
         fav.url = cat.url;
         fav.timeStamp = System.currentTimeMillis()+"";
         CollectionReference collectionReference = db.collection(FAVOURITES);
@@ -60,8 +62,16 @@ public class FireBaseDBPresenter implements OnSuccessListener<DocumentReference>
     public void onComplete(@NonNull Task<QuerySnapshot> task) {
         if(task.isSuccessful()){
             ArrayList<Favorite> fav = new ArrayList<Favorite>();
-            for(QueryDocumentSnapshot snapshot : task.getResult())
-                Log.d("AAA", snapshot.getId()+" "+snapshot.getData());
+            for(QueryDocumentSnapshot snapshot : Objects.requireNonNull(task.getResult())){
+                Map<String, Object> map = snapshot.getData();
+                Favorite favorite = new Favorite();
+                favorite.url = map.get("url").toString();
+                favorite.timeStamp = map.get("timeStamp").toString();
+                if(map.get("raza") != null)
+                    favorite.raza = map.get("raza").toString();
+                fav.add(favorite);
+            }
+            onCatListener.onFavourCatGet(fav);
         }
     }
 }

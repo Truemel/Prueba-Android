@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,12 @@ import com.example.prueba_android.model.Breed;
 import com.example.prueba_android.model.BreedsListAdapter;
 import com.example.prueba_android.model.Cat;
 import com.example.prueba_android.model.OnBreedClickListener;
-import com.example.prueba_android.presenter.AmazingCatPresenter;
+import com.example.prueba_android.presenter.FireBaseDBPresenter;
 import com.example.prueba_android.presenter.OnCatRequestListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -36,8 +41,8 @@ public class BreedsFragment extends Fragment implements View.OnClickListener, On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AmazingCatPresenter catPresenter = new AmazingCatPresenter(this, getContext());
-        catPresenter.breedsRequest();
+        Type listType = new TypeToken<List<Breed>>(){}.getType();
+        breeds = new Gson().fromJson(getArguments().getString("breeds"), listType);
     }
 
     @Override
@@ -45,17 +50,19 @@ public class BreedsFragment extends Fragment implements View.OnClickListener, On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_breeds, container, false);
+        viewInit();
         return binder.getRoot();
     }
 
     private void viewInit(){
         binder.button.setOnClickListener(this);
+        binder.recView.setLayoutManager(new LinearLayoutManager(getContext()));
         binder.recView.setAdapter(new BreedsListAdapter(getContext(), breeds, this));
     }
 
     @Override
     public void onClick(View v) {
-
+        ((MainActivity)getActivity()).changeFragment(new FavouritesFragment());
     }
 
     @Override
@@ -65,8 +72,7 @@ public class BreedsFragment extends Fragment implements View.OnClickListener, On
 
     @Override
     public void onBreedsGot(List<Breed> breeds) {
-        if(breeds != null)
-            this.breeds = breeds;
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.prueba_android.view;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,13 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.prueba_android.R;
-import com.example.prueba_android.model.Breed;
-import com.example.prueba_android.model.Cat;
-import com.example.prueba_android.model.CatListAdapter;
-import com.example.prueba_android.model.OnCatClickListener;
-import com.example.prueba_android.presenter.AmazingCatPresenter;
+import com.example.prueba_android.model.Favorite;
+import com.example.prueba_android.model.FavouriteListAdapter;
 import com.example.prueba_android.presenter.FireBaseDBPresenter;
-import com.example.prueba_android.presenter.OnCatRequestListener;
 import com.example.prueba_android.presenter.OnFavourCatListener;
 
 import java.util.List;
@@ -26,26 +23,25 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CatDetailsFragment extends Fragment implements OnCatRequestListener, OnCatClickListener {
+public class FavouritesFragment extends Fragment implements OnFavourCatListener {
 
-    private List<Cat> catList;
     private RecyclerView recyclerView;
     private FireBaseDBPresenter fireDB;
+    private ProgressDialog progress;
 
-    public CatDetailsFragment() {
+    public FavouritesFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
+        progress = ProgressDialog.show(getContext(), "Loading", "Now Loading", true);
     }
 
     private void init(){
-        fireDB = new FireBaseDBPresenter(getContext(), null);
-        AmazingCatPresenter catPresenter = new AmazingCatPresenter(this, getContext());
-        catPresenter.catRequest(getArguments().getString("id"), 100);
+        fireDB = new FireBaseDBPresenter(getContext(), this);
+        fireDB.getFavouriteCatsList();
     }
 
     @Override
@@ -55,21 +51,13 @@ public class CatDetailsFragment extends Fragment implements OnCatRequestListener
         View view = inflater.inflate(R.layout.fragment_cat_details, container, false);
         recyclerView = view.findViewById(R.id.recDetailsView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        init();
         return view;
     }
 
     @Override
-    public void onCatGot(List<Cat> cat) {
-        recyclerView.setAdapter(new CatListAdapter(getContext(), cat, this));
-    }
-
-    @Override
-    public void onBreedsGot(List<Breed> breeds) {
-
-    }
-
-    @Override
-    public void onCatClick(Cat cat) {
-        fireDB.uploadFavourite(cat);
+    public void onFavourCatGet(List<Favorite> favorite) {
+        recyclerView.setAdapter(new FavouriteListAdapter(getContext(), favorite));
+        progress.dismiss();
     }
 }
