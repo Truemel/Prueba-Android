@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnCatRequestListe
         Bundle bundle = new Bundle();
         bundle.putString("breeds", new Gson().toJson(breeds));
         fragment.setArguments(bundle);
-        changeFragment(fragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLay, fragment).commit();
         progress.dismiss();
     }
 
@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements OnCatRequestListe
      * @param fragment
      */
     public void changeFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frameLay, fragment).commit();
+        if(!isChangingConfigurations())
+            getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frameLay, fragment).commit();
     }
 
     @Override
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnCatRequestListe
 
     @Override
     public void onBreedsGot(List<Breed> breeds) {
-        init(breeds);
+        if(!isChangingConfigurations())
+            init(breeds);
     }
 }
